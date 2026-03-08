@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agenturzusammenführung – Strategieübersicht</title>
+  <meta name="description" content="Interaktive Strategieübersicht für die Zusammenführung von Performance, Foto und Video zu einer gemeinsamen Agentur." />
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg-soft: #111831;
+      --panel: rgba(18, 26, 49, 0.72);
+      --text: #f5f7fb;
+      --muted: #aeb8d1;
+      --line: rgba(255,255,255,0.09);
+      --accent: #73e0c1;
+      --accent-2: #8bb2ff;
+      --danger: #ff9d9d;
+      --warning: #ffd99a;
+      --good: #8ef2b1;
+      --shadow: 0 24px 80px rgba(0,0,0,0.35);
+      --radius: 22px;
+      --max: 1360px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 10%, rgba(115,224,193,0.10), transparent 28%),
+        radial-gradient(circle at 90% 5%, rgba(139,178,255,0.15), transparent 32%),
+        linear-gradient(180deg, #090d19 0%, #0b1020 46%, #09101d 100%);
+      min-height: 100vh;
+    }
+    a { color: inherit; text-decoration: none; }
+    .shell { max-width: var(--max); margin: 0 auto; padding: 28px; }
+    .topbar {
+      position: sticky; top: 0; z-index: 30; backdrop-filter: blur(18px);
+      background: rgba(8, 12, 24, 0.72); border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .topbar-inner {
+      max-width: var(--max); margin: 0 auto; padding: 14px 28px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; }
+    .brand-mark {
+      width: 14px; height: 14px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 32px rgba(115,224,193,0.38);
+    }
+    .top-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 11px 16px; border-radius: 999px; border: 1px solid var(--line);
+      color: var(--text); background: rgba(255,255,255,0.02); font-size: 14px;
+      transition: 0.22s ease; cursor: pointer;
+    }
+    .btn:hover { transform: translateY(-1px); background: rgba(255,255,255,0.06); }
+    .btn.primary {
+      border-color: transparent; color: #08111b;
+      background: linear-gradient(135deg, var(--accent), #a8f1dd); font-weight: 700;
+    }
+    .hero {
+      padding-top: 54px; padding-bottom: 42px; display: grid;
+      grid-template-columns: 1.2fr 0.8fr; gap: 26px; align-items: stretch;
+    }
+    .hero-card, .panel {
+      background: var(--panel); border: 1px solid var(--line);
+      border-radius: var(--radius); box-shadow: var(--shadow); backdrop-filter: blur(22px);
+    }
+    .hero-main { padding: 34px; position: relative; overflow: hidden; }
+    .hero-main::after {
+      content: ""; position: absolute; inset: auto -10% -30% auto; width: 340px; height: 340px;
+      background: radial-gradient(circle, rgba(139,178,255,0.18), transparent 65%); pointer-events: none;
+    }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px; font-size: 13px;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 18px;
+    }
+    h1 { margin: 0 0 18px; font-size: clamp(2.3rem, 5vw, 4.6rem); line-height: 0.98; letter-spacing: -0.045em; }
+    .lead {
+      font-size: clamp(1.05rem, 1.8vw, 1.22rem); line-height: 1.65; color: var(--muted);
+      max-width: 850px; margin: 0 0 22px;
+    }
+    .hero-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 22px; }
+    .tag {
+      display: inline-flex; align-items: center; gap: 8px; padding: 10px 13px; border-radius: 999px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      color: #d9e1f5; font-size: 14px;
+    }
+    .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+    .hero-side { padding: 24px; display: grid; gap: 16px; grid-template-rows: auto auto 1fr; }
+    .score-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .score {
+      padding: 18px; border-radius: 18px; background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+    .score strong { display: block; font-size: 1.7rem; margin-bottom: 6px; }
+    .score span { color: var(--muted); font-size: 0.95rem; }
+    .micro-list { display: grid; gap: 10px; margin-top: 6px; }
+    .micro-item {
+      padding: 14px 14px; border-radius: 16px; background: rgba(255,255,255,0.035);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+    .layout {
+      display: grid; grid-template-columns: 290px minmax(0, 1fr);
+      gap: 22px; align-items: start; padding-bottom: 70px;
+    }
+    .sidebar {
+      position: sticky; top: 80px; padding: 18px; background: rgba(16, 23, 43, 0.72);
+      border: 1px solid var(--line); border-radius: 22px; backdrop-filter: blur(18px);
+    }
+    .sidebar h3 {
+      margin: 4px 0 14px; font-size: 0.95rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .nav-list { display: grid; gap: 6px; }
+    .nav-list a {
+      padding: 11px 12px; border-radius: 12px; color: #d9e1f5; font-size: 0.97rem;
+      border: 1px solid transparent; transition: 0.18s ease;
+    }
+    .nav-list a:hover, .nav-list a.active { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.07); }
+    .content { display: grid; gap: 22px; }
+    .section {
+      padding: 28px; border-radius: var(--radius); background: var(--panel);
+      border: 1px solid var(--line); box-shadow: var(--shadow); backdrop-filter: blur(18px); scroll-margin-top: 96px;
+    }
+    .section-head {
+      display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between;
+      gap: 14px; margin-bottom: 22px;
+    }
+    .section h2 { margin: 0; font-size: clamp(1.45rem, 2vw, 2.2rem); letter-spacing: -0.03em; }
+    .section p.section-intro { margin: 0; color: var(--muted); max-width: 900px; line-height: 1.7; }
+    .cards { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
+    .card {
+      grid-column: span 4; padding: 20px; border-radius: 18px; background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07); min-height: 100%;
+    }
+    .card h3 { margin: 0 0 8px; font-size: 1.06rem; letter-spacing: -0.02em; }
+    .card p, .card li { color: var(--muted); line-height: 1.65; margin: 0; }
+    .card ul { margin: 12px 0 0; padding-left: 18px; }
+    .span-6 { grid-column: span 6; }
+    .span-8 { grid-column: span 8; }
+    .span-12 { grid-column: span 12; }
+    .table-wrap { overflow: auto; border-radius: 18px; border: 1px solid rgba(255,255,255,0.08); }
+    table { width: 100%; border-collapse: collapse; min-width: 860px; background: rgba(255,255,255,0.03); }
+    th, td {
+      padding: 14px 16px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.07); vertical-align: top;
+    }
+    th {
+      font-size: 0.86rem; text-transform: uppercase; letter-spacing: 0.06em; color: #dce4fa;
+      background: rgba(255,255,255,0.03);
+    }
+    td { color: var(--muted); line-height: 1.55; }
+    .pill {
+      display: inline-block; padding: 5px 10px; border-radius: 999px; font-size: 12px;
+      border: 1px solid rgba(255,255,255,0.1); margin-right: 6px; margin-bottom: 6px;
+      color: #eef2ff; background: rgba(255,255,255,0.04);
+    }
+    .pill.good { border-color: rgba(142,242,177,0.28); color: var(--good); }
+    .pill.warn { border-color: rgba(255,217,154,0.28); color: var(--warning); }
+    .pill.bad { border-color: rgba(255,157,157,0.28); color: var(--danger); }
+    .timeline { display: grid; gap: 14px; position: relative; }
+    .timeline::before {
+      content: ""; position: absolute; left: 14px; top: 8px; bottom: 8px; width: 2px; background: rgba(255,255,255,0.1);
+    }
+    .step { position: relative; padding: 0 0 0 42px; }
+    .step::before {
+      content: ""; position: absolute; left: 7px; top: 8px; width: 16px; height: 16px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 0 0 0 6px rgba(115,224,193,0.08);
+    }
+    .step strong { display: block; margin-bottom: 6px; font-size: 1rem; }
+    .quote {
+      padding: 22px; border-radius: 18px; background: linear-gradient(180deg, rgba(115,224,193,0.08), rgba(139,178,255,0.08));
+      border: 1px solid rgba(255,255,255,0.08); font-size: 1.08rem; line-height: 1.7; color: #eef4ff;
+    }
+    .logos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+    .logo-box {
+      padding: 16px; min-height: 74px; border-radius: 16px; border: 1px dashed rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.02); display: flex; align-items: center; justify-content: center;
+      text-align: center; color: #d9e1f5; font-size: 0.95rem;
+    }
+    .footer { padding: 22px 28px 60px; color: var(--muted); text-align: center; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    @media (max-width: 1080px) {
+      .hero { grid-template-columns: 1fr; }
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: relative; top: auto; }
+      .logos { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 760px) {
+      .shell, .topbar-inner { padding-left: 16px; padding-right: 16px; }
+      .hero-main, .hero-side, .section { padding: 22px; }
+      .cards { grid-template-columns: 1fr; }
+      .card, .span-6, .span-8, .span-12 { grid-column: auto; }
+      .logos { grid-template-columns: repeat(2, 1fr); }
+      .score-grid { grid-template-columns: 1fr; }
+      h1 { font-size: 2.35rem; }
+    }
+    @media print {
+      .topbar, .sidebar, .hero-cta { display: none !important; }
+      body { background: #fff; color: #111; }
+      .hero-card, .panel, .section, .sidebar { box-shadow: none; background: #fff; border-color: #ddd; }
+      .card, .logo-box, table { background: #fff; }
+      .lead, .card p, td, .section-intro { color: #333; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-mark"></span>
+        <span>Agenturzusammenführung – Strategieübersicht</span>
+      </div>
+      <div class="top-actions">
+        <a class="btn" href="#empfehlung">Zur Empfehlung</a>
+        <button class="btn" onclick="window.print()">PDF / Print</button>
+        <a class="btn primary" href="#next-steps">Entscheidungspunkte</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <div class="hero-card hero-main">
+        <div class="eyebrow">Interaktive Übersicht • Für gemeinsame Abstimmung der drei Agenturen</div>
+        <h1>Wie aus drei<br>Kompetenzen ein<br>gemeinsames, stark<br>verkaufbares Modell wird.</h1>
+        <p class="lead">
+          Diese Seite verdichtet die Analyse in eine klare Präsentation für die geplante Zusammenführung von
+          Performance-Marketing, Fotografie und Videoproduktion. Im Fokus stehen Marktbild, Positionierung,
+          Angebotslogik, AI-Rolle und eine Website-Struktur, die das gemeinsame Modell verständlich macht.
+        </p>
+        <div class="hero-meta">
+          <span class="tag">Performance</span>
+          <span class="tag">Foto</span>
+          <span class="tag">Video</span>
+          <span class="tag">Retainer-Modell</span>
+          <span class="tag">GitHub Pages geeignet</span>
+        </div>
+        <div class="hero-cta">
+          <a class="btn primary" href="#website">Website-Struktur ansehen</a>
+          <a class="btn" href="#packages">Angebotslogik ansehen</a>
+        </div>
+        <div class="quote">
+          Zentrale Erkenntnis: <strong>Die stärkste gemeinsame Story ist nicht „Full Service“, sondern ein klares System aus Produktion,
+          Content-Weiterverarbeitung, Distribution und Performance.</strong>
+        </div>
+      </div>
+
+      <div class="hero-card hero-side">
+        <div class="score-grid">
+          <div class="score"><strong>3</strong><span>relevante Positionierungsrichtungen</span></div>
+          <div class="score"><strong>1</strong><span>bevorzugte Hauptlogik</span></div>
+          <div class="score"><strong>3</strong><span>Kernbausteine im Angebotsmodell</span></div>
+          <div class="score"><strong>6</strong><span>sinnvolle Showcase-Cases</span></div>
+        </div>
+        <div class="micro-list">
+          <div class="micro-item"><strong>Empfehlung:</strong> Performance-getriebene Content-Engine</div>
+          <div class="micro-item"><strong>Verkaufslogik:</strong> Produktion → Engine → Distribution → Optimierung</div>
+          <div class="micro-item"><strong>AI:</strong> im Nutzen sichtbar, nicht als Hype-Versprechen</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="layout">
+      <aside class="sidebar panel">
+        <h3>Inhalt</h3>
+        <nav class="nav-list" id="sideNav">
+          <a href="#summary">Executive Summary</a>
+          <a href="#market">Marktanalyse</a>
+          <a href="#audiences">Zielgruppen</a>
+          <a href="#positioning">Positionierungsoptionen</a>
+          <a href="#empfehlung">Empfehlung</a>
+          <a href="#packages">Angebotsarchitektur</a>
+          <a href="#ai">Rolle von AI</a>
+          <a href="#wording">Wording</a>
+          <a href="#website">Homepage-Konzept</a>
+          <a href="#references">Referenzen & Cases</a>
+          <a href="#next-steps">Entscheidungspunkte</a>
+        </nav>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="summary">
+          <div class="section-head">
+            <div>
+              <h2>A. Executive Summary</h2>
+              <p class="section-intro">Die gemeinsame Chance liegt in einer sauberen Verbindung von visueller Qualität, moderner Vermarktung und systemischer Umsetzungslogik.</p>
+            </div>
+          </div>
+          <div class="cards">
+            <article class="card span-6">
+              <h3>Was die Kombination stark macht</h3>
+              <p>Foto und Video schaffen echte Produktionssubstanz. Performance bringt Messbarkeit und Verwertung. In Kombination entsteht daraus ein Modell, das mehr ist als Content-Produktion und mehr als reine Ads-Betreuung.</p>
+            </article>
+            <article class="card span-6">
+              <h3>Was vermieden werden sollte</h3>
+              <p>Ein breites „Wir machen alles“ verwässert die gemeinsame Stärke. Ebenso problematisch sind zu viele interne Details, Tool-Namen oder Sports-Edition-spezifische Perspektiven in der Außendarstellung.</p>
+            </article>
+            <article class="card span-12">
+              <h3>Kernaussage der Analyse</h3>
+              <p>Das überzeugendste Marktbild ist eine Agentur, die aus hochwertiger Produktion einen planbaren Content- und Kampagnenprozess macht. Nicht Einzelmaßnahmen stehen im Vordergrund, sondern ein wiederholbares System mit klaren Ergebnissen, besserer Konsistenz und spürbarer Entlastung für Kund:innen.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="market">
+          <div class="section-head">
+            <div>
+              <h2>B. Marktanalyse</h2>
+              <p class="section-intro">Viele Agenturen kommunizieren ähnlich. Wirklich differenzierend ist die Verbindung aus Produktion, Skalierbarkeit und Performance-Verantwortung.</p>
+            </div>
+          </div>
+          <div class="cards">
+            <article class="card">
+              <h3>Social-Media-Agenturen</h3>
+              <p>Häufig stark in Betreuung, Redaktionsplänen und Publishing, aber oft schwächer in Tiefe, Creative Supply oder messbarer Geschäftswirkung.</p>
+            </article>
+            <article class="card">
+              <h3>Produktionsagenturen</h3>
+              <p>Stark in Bild und Film, aber häufig projektlastig. Das Material endet oft ohne systematische Weiterverarbeitung oder Kampagnenlogik.</p>
+            </article>
+            <article class="card">
+              <h3>Performance-Agenturen</h3>
+              <p>Stark in Zahlen und Optimierung, aber häufig abhängig von externen Creatives. Genau dort entsteht oft ein Qualitäts- und Geschwindigkeitsproblem.</p>
+            </article>
+            <article class="card span-6">
+              <h3>Die eigentliche Marktlücke</h3>
+              <p>Unternehmen suchen weniger Einzelgewerke und mehr funktionierende Gesamtlogik. Besonders attraktiv ist daher ein Modell, das aus Produktion laufenden Output macht und diesen direkt mit Paid, Landingpages und Optimierung verbindet.</p>
+            </article>
+            <article class="card span-6">
+              <h3>Wiederkehrende Pain Points auf Kundenseite</h3>
+              <ul>
+                <li>zu viele Dienstleister, zu wenig Koordination</li>
+                <li>gutes Material, aber keine klare Verwertung</li>
+                <li>laufender Content ohne konsistente Linie</li>
+                <li>zu wenig Geschwindigkeit bei Varianten und Kampagnen</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="audiences">
+          <div class="section-head">
+            <div>
+              <h2>C. Zielgruppen</h2>
+              <p class="section-intro">Das Modell ist besonders stark dort, wo laufender Content, Performance und hochwertige visuelle Produktion gemeinsam relevant sind.</p>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Zielgruppe</th>
+                  <th>Content-Bedarf</th>
+                  <th>Paid-Relevanz</th>
+                  <th>Retainer-Fit</th>
+                  <th>Passende Ansprache</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>E-Commerce / Shopify Brands</td>
+                  <td>hoch</td>
+                  <td>hoch</td>
+                  <td>sehr hoch</td>
+                  <td>direkt, performanceorientiert, klar</td>
+                </tr>
+                <tr>
+                  <td>Dienstleister mit Lead-Fokus</td>
+                  <td>mittel bis hoch</td>
+                  <td>hoch</td>
+                  <td>hoch</td>
+                  <td>vertrauensstark, strukturiert</td>
+                </tr>
+                <tr>
+                  <td>Health / Beauty / Lifestyle</td>
+                  <td>hoch</td>
+                  <td>hoch</td>
+                  <td>hoch</td>
+                  <td>ästhetisch, modern, hochwertig</td>
+                </tr>
+                <tr>
+                  <td>B2B / Industrie mit Erklärungsbedarf</td>
+                  <td>mittel</td>
+                  <td>mittel</td>
+                  <td>mittel bis hoch</td>
+                  <td>klar, systemisch, verständlich</td>
+                </tr>
+                <tr>
+                  <td>Employer Branding / Recruiting</td>
+                  <td>mittel bis hoch</td>
+                  <td>mittel bis hoch</td>
+                  <td>hoch</td>
+                  <td>authentisch, menschlich, professionell</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="section" id="positioning">
+          <div class="section-head">
+            <div>
+              <h2>D. Positionierungsoptionen</h2>
+              <p class="section-intro">Mehrere Richtungen sind grundsätzlich möglich. Entscheidend ist, welche am verständlichsten, am verkaufbarsten und am wenigsten austauschbar ist.</p>
+            </div>
+          </div>
+          <div class="cards">
+            <article class="card span-4">
+              <h3>1. Content-First Growth Partner</h3>
+              <p><strong>Logik:</strong> hochwertige Produktion als Ausgangspunkt für Reichweite, Sichtbarkeit und Wachstum.<br><br><strong>Stärke:</strong> leicht verständlich.<br><strong>Risiko:</strong> kann zu nah an klassischer Content-Agentur wirken.</p>
+            </article>
+            <article class="card span-4">
+              <h3>2. Performance-getriebene Content-Agentur</h3>
+              <p><strong>Logik:</strong> Content ist nicht Endprodukt, sondern Treiber für Kampagnen, Conversion und Wachstum.<br><br><strong>Stärke:</strong> sehr gut verkaufbar.<br><strong>Risiko:</strong> visuelle Tiefe muss weiterhin klar sichtbar bleiben.</p>
+            </article>
+            <article class="card span-4">
+              <h3>3. Content Operating System</h3>
+              <p><strong>Logik:</strong> die Agentur liefert nicht nur Assets, sondern ein laufendes Marketing- und Produktionssystem.<br><br><strong>Stärke:</strong> modern und differenziert.<br><strong>Risiko:</strong> stärker erklärungsbedürftig.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="empfehlung">
+          <div class="section-head">
+            <div>
+              <h2>E. Klare Empfehlung</h2>
+              <p class="section-intro">Die stärkste Hauptlogik verbindet Verständlichkeit mit echter operativer Substanz.</p>
+            </div>
+          </div>
+          <div class="cards">
+            <article class="card span-8">
+              <h3>Bevorzugte Richtung</h3>
+              <p><strong>Performance-getriebene Content-Engine.</strong><br><br>
+              Diese Formulierung ist klar genug für Website, Pitch und Vertrieb, aber gleichzeitig differenzierter als „Social Media“, „Full Service“ oder „Content Creation“. Sie lässt genug Raum, um Produktion, Weiterverarbeitung, Kampagnen, Landingpages und AI-gestützte Skalierung unter einer gemeinsamen Logik zusammenzuführen.</p>
+            </article>
+            <article class="card span-4">
+              <h3>Warum diese Richtung trägt</h3>
+              <ul>
+                <li>einfach erklärbar</li>
+                <li>retainer-fähig</li>
+                <li>modern, ohne hypegetrieben zu wirken</li>
+                <li>kreativ und zugleich umsetzungsstark</li>
+              </ul>
+            </article>
+            <article class="card span-12">
+              <h3>Tragfähige gemeinsame USPs</h3>
+              <p>
+                <span class="pill good">Ein Produktionstag wird zu monatelangem Output</span>
+                <span class="pill good">Foto, Video, Performance und Landingpages greifen ineinander</span>
+                <span class="pill good">Schnellere Variantenbildung und höhere Konsistenz</span>
+                <span class="pill good">Human-led Qualität statt generischer AI-Ästhetik</span>
+                <span class="pill good">Wiederkehrende Betreuung statt Einzelprojektlogik</span>
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="packages">
+          <div class="section-head">
+            <div>
+              <h2>F. Angebotsarchitektur</h2>
+              <p class="section-intro">Das Angebot sollte wie ein Produkt wirken: klar, modular und in der Zusammenarbeit leicht verständlich.</p>
+            </div>
+          </div>
+          <div class="timeline">
+            <div class="step">
+              <strong>1. Strategie & Blueprint</strong>
+              <p>Ziele, Zielgruppen, Messaging, Kanalbild, Content-Logik und Messgrößen definieren. Das schafft die Grundlage für ein gemeinsames Setup.</p>
+            </div>
+            <div class="step">
+              <strong>2. Produktionstag</strong>
+              <p>Foto, Video, mobile-first Assets, Motive, Hooks, Formate und Rohmaterial strukturiert produzieren. Das ist der Rohstoff für die Engine.</p>
+            </div>
+            <div class="step">
+              <strong>3. Content Engine</strong>
+              <p>Aus dem Material entstehen laufende Formate, Varianten, Redaktionsstücke, Reels, Ads und modulare Ausspielungsassets.</p>
+            </div>
+            <div class="step">
+              <strong>4. Performance & Optimierung</strong>
+              <p>Kampagnen, Landingpages, Testing und Reporting verbinden die Produktion direkt mit messbaren Ergebnissen.</p>
+            </div>
+          </div>
+          <div class="cards" style="margin-top:18px;">
+            <article class="card span-4">
+              <h3>Einstiegsmodell</h3>
+              <p><strong>Blueprint</strong><br>Für Kund:innen, die zunächst Klarheit, Struktur und Richtung brauchen.</p>
+            </article>
+            <article class="card span-4">
+              <h3>Laufendes Modell</h3>
+              <p><strong>Content Engine</strong><br>Für Unternehmen mit kontinuierlichem Sichtbarkeits- und Contentbedarf.</p>
+            </article>
+            <article class="card span-4">
+              <h3>Wachstumsmodell</h3>
+              <p><strong>Performance Engine</strong><br>Für stärkeren Fokus auf Leads, Bewerbungen oder Umsatz.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="ai">
+          <div class="section-head">
+            <div>
+              <h2>G. Rolle von AI</h2>
+              <p class="section-intro">AI sollte als Qualitäts-, Geschwindigkeits- und Konsistenzvorteil auftreten. Nicht als Selbstzweck.</p>
+            </div>
+          </div>
+          <div class="cards">
+            <article class="card span-4">
+              <h3>Sichtbarer Nutzen</h3>
+              <p>Mehr Formate aus einem Produktionstag, schnellere Varianten für Kampagnen und effizientere Weiterverarbeitung bestehender Inhalte.</p>
+            </article>
+            <article class="card span-4">
+              <h3>Was vermieden werden sollte</h3>
+              <p>Tool-lastige Außendarstellung, übertriebene Automatisierungsversprechen und jede Kommunikation, die billig oder austauschbar wirkt.</p>
+            </article>
+            <article class="card span-4">
+              <h3>Empfohlene Formulierung</h3>
+              <p>„Mehr Output ohne mehr Chaos. Schnellere Ausspielung, bessere Varianten und konsistente Qualität im laufenden Betrieb.“</p>
+            </article>
+            <article class="card span-12">
+              <h3>Geeignete Aussagen</h3>
+              <p>
+                <span class="pill good">Mehr Varianten ohne mehr Drehtage</span>
+                <span class="pill good">Schneller von Rohmaterial zu Format</span>
+                <span class="pill good">Konsistenter über mehrere Kanäle</span>
+                <span class="pill bad">AI-first Agency</span>
+                <span class="pill bad">Powered by AI</span>
+                <span class="pill bad">vollautomatisierte Kreativität</span>
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="wording">
+          <div class="section-head">
+            <div>
+              <h2>H. Wording</h2>
+              <p class="section-intro">Die Sprache sollte modern und hochwertig wirken, aber nicht laut, nicht künstlich und nicht generisch.</p>
+            </div>
+          </div>
+          <div class="cards">
+            <article class="card span-6">
+              <h3>Starke Begriffe</h3>
+              <p>
+                <span class="pill">Content-Engine</span>
+                <span class="pill">Produktion trifft Performance</span>
+                <span class="pill">planbarer Output</span>
+                <span class="pill">digitale Umsetzung</span>
+                <span class="pill">konsistente Sichtbarkeit</span>
+                <span class="pill">laufender Content-Prozess</span>
+              </p>
+            </article>
+            <article class="card span-6">
+              <h3>Schwache Begriffe</h3>
+              <p>
+                <span class="pill bad">Full-Service-Agentur</span>
+                <span class="pill bad">360°</span>
+                <span class="pill bad">Next Level</span>
+                <span class="pill bad">innovativ</span>
+                <span class="pill bad">maßgeschneiderte Lösungen</span>
+                <span class="pill bad">powered by AI</span>
+              </p>
+            </article>
+            <article class="card span-12">
+              <h3>Claim-Richtungen</h3>
+              <ul>
+                <li>Aus Produktion wird ein System.</li>
+                <li>Produktion trifft Performance.</li>
+                <li>Content, der nicht endet, sondern arbeitet.</li>
+                <li>Mehr Output. Mehr Klarheit. Mehr Wirkung.</li>
+                <li>Strategie, Produktion und Ausspielung in einem Ablauf.</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="website">
+          <div class="section-head">
+            <div>
+              <h2>I. Homepage-Konzept</h2>
+              <p class="section-intro">Die Homepage sollte die gemeinsame Logik erzählen, nicht die Herkunft der einzelnen Agenturen.</p>
+            </div>
+          </div>
+          <div class="cards">
+            <article class="card span-12">
+              <h3>Empfohlene Startseiten-Struktur</h3>
+              <div class="timeline" style="margin-top:14px;">
+                <div class="step"><strong>1. Hero</strong><p>Klare Positionierung, Nutzenversprechen und ein direkter erster Proof.</p></div>
+                <div class="step"><strong>2. Vertrauensanker</strong><p>Saubere Logo-Leiste, damit sofort sichtbar ist: Es gibt reale Referenzen und echte Projekterfahrung.</p></div>
+                <div class="step"><strong>3. Das System</strong><p>Produktion → Engine → Distribution → Optimierung in 4 bis 5 verständlichen Schritten zeigen.</p></div>
+                <div class="step"><strong>4. Module</strong><p>Content, Performance, Web und strategische Strukturierung als zusammenhängende Leistungsblöcke erklären.</p></div>
+                <div class="step"><strong>5. Cases</strong><p>Wenige, starke Showcase-Kacheln statt einer überladenen Referenzwand.</p></div>
+                <div class="step"><strong>6. Zusammenarbeit</strong><p>Wie ein Retainer konkret abläuft und welchen Output Kund:innen regelmäßig erhalten.</p></div>
+                <div class="step"><strong>7. AI-Nutzen</strong><p>Vorteile in Speed, Varianten und Konsistenz kurz und seriös übersetzen.</p></div>
+                <div class="step"><strong>8. Abschluss</strong><p>Kontakt, Gesprächsanfrage und kurze FAQ.</p></div>
+              </div>
+            </article>
+            <article class="card span-6">
+              <h3>Hero-Richtung</h3>
+              <p><strong>Headline:</strong> Content und Performance als System.<br><br>
+              <strong>Subline:</strong> Hochwertige Produktion, laufende Content-Weiterverarbeitung, Kampagnen und digitale Umsetzung in einem klaren Ablauf.</p>
+            </article>
+            <article class="card span-6">
+              <h3>Was auf der Startseite nicht dominieren sollte</h3>
+              <p>Keine internen Erklärungen, keine agenturspezifischen Hintergründe, keine Anweisungen an die Gründerseite. Die Website sollte wie eine eigenständige gemeinsame Marke wirken.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="references">
+          <div class="section-head">
+            <div>
+              <h2>J. Referenzen & Cases</h2>
+              <p class="section-intro">Für die Startseite ist eine klare Gewichtung sinnvoll: wenige visuelle Cases, dazu ein sauberes Logo-Grid.</p>
+            </div>
+          </div>
+          <div class="cards">
+            <article class="card span-6">
+              <h3>Sinnvolle Showcase-Cases</h3>
+              <p>
+                <span class="pill good">Yellow Kangaroo</span>
+                <span class="pill good">Georg Pangl</span>
+                <span class="pill good">Rationale Network</span>
+                <span class="pill good">Arlberg Getränke</span>
+                <span class="pill good">Birner</span>
+                <span class="pill good">Goldschmiedin Grabner</span>
+              </p>
+            </article>
+            <article class="card span-6">
+              <h3>Primär als Logos</h3>
+              <p>
+                <span class="pill">TSA</span>
+                <span class="pill">Spielerpass</span>
+                <span class="pill">Bundesverwaltungsakademie</span>
+                <span class="pill">Außenministerium</span>
+                <span class="pill">Wiener Städtische</span>
+                <span class="pill">Mountainmaster</span>
+                <span class="pill">Der Weinladen</span>
+                <span class="pill">Schröpfmaster</span>
+              </p>
+            </article>
+            <article class="card span-12">
+              <h3>Logo-Platzhalter-Grid</h3>
+              <div class="logos">
+                <div class="logo-box">Yellow Kangaroo</div>
+                <div class="logo-box">Georg Pangl</div>
+                <div class="logo-box">Rationale Network</div>
+                <div class="logo-box">Arlberg Getränke</div>
+                <div class="logo-box">Birner</div>
+                <div class="logo-box">Goldschmiedin Grabner</div>
+                <div class="logo-box">TSA</div>
+                <div class="logo-box">Spielerpass</div>
+                <div class="logo-box">Bundesverwaltungsakademie</div>
+                <div class="logo-box">Außenministerium</div>
+                <div class="logo-box">Wiener Städtische</div>
+                <div class="logo-box">Mountainmaster</div>
+                <div class="logo-box">Der Weinladen</div>
+                <div class="logo-box">Schröpfmaster</div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="next-steps">
+          <div class="section-head">
+            <div>
+              <h2>K. Entscheidungspunkte für die gemeinsame Abstimmung</h2>
+              <p class="section-intro">Diese Punkte sind zentral, um aus der strategischen Richtung ein gemeinsames Marktangebot zu machen.</p>
+            </div>
+          </div>
+          <div class="cards">
+            <article class="card span-4">
+              <h3>1. Gemeinsame Hauptlogik fixieren</h3>
+              <p>Wird die Agentur primär über Content, Performance oder die Engine-Logik verkauft? Die Analyse spricht klar für die Engine mit Performance-Fokus.</p>
+            </article>
+            <article class="card span-4">
+              <h3>2. Angebotsarchitektur vereinfachen</h3>
+              <p>Einfacher Dreiklang: Blueprint, Content Engine, Performance Engine. Das ist klarer als zu viele Spezialpakete zum Start.</p>
+            </article>
+            <article class="card span-4">
+              <h3>3. Cases priorisieren</h3>
+              <p>Für den gemeinsamen Auftritt sollten zuerst 3 bis 6 Projekte mit sauberer Story, Bildmaterial und klarer Leistung aufbereitet werden.</p>
+            </article>
+            <article class="card span-12">
+              <h3>GitHub Pages Deployment</h3>
+              <p class="mono">Repository erstellen → index.html in den Root legen → Commit & Push → GitHub Pages in den Repo Settings aktivieren → Branch <strong>main</strong> / Folder <strong>/root</strong> wählen.</p>
+            </article>
+          </div>
+          <div style="margin-top:16px;" class="quote">
+            Die Präsentation ist bewusst auf gemeinsame Entscheidungsfindung ausgerichtet: weniger interne Hinweise, weniger Sports-Edition-spezifische Perspektive, mehr Fokus auf das gemeinsame Marktmodell.
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    Erstellt als statische HTML-Seite für GitHub Pages. Anpassbar in <span class="mono">index.html</span>.
+  </footer>
+
+  <script>
+    const navLinks = document.querySelectorAll('#sideNav a');
+    const sections = [...document.querySelectorAll('.section')];
+    const setActiveNav = () => {
+      let current = sections[0]?.id;
+      sections.forEach(section => {
+        const top = section.getBoundingClientRect().top;
+        if (top <= 140) current = section.id;
+      });
+      navLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+      });
+    };
+    window.addEventListener('scroll', setActiveNav, { passive: true });
+    setActiveNav();
+  </script>
+</body>
+</html>
